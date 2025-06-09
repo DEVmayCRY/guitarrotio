@@ -22,6 +22,7 @@ import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm
 import com.example.guitarottio.R
 import com.example.guitarottio.core.music.MusicTheory
 import com.example.guitarottio.ui.views.FretboardView
+import com.example.guitarottio.ui.views.PianoView
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlin.math.ln
 import kotlin.math.pow
@@ -51,7 +52,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var centsTextView: TextView
     private lateinit var modeSwitch: SwitchMaterial
     private lateinit var fretboardView: FretboardView
+    private lateinit var pianoView: PianoView
     private lateinit var scaleSelectorLayout: LinearLayout
+    private lateinit var tunerInfoLayout: LinearLayout
     private lateinit var rootNoteSpinner: Spinner
     private lateinit var scaleTypeSpinner: Spinner
 
@@ -90,7 +93,9 @@ class MainActivity : AppCompatActivity() {
         centsTextView = findViewById(R.id.centsTextView)
         modeSwitch = findViewById(R.id.modeSwitch)
         fretboardView = findViewById(R.id.fretboardView)
+        pianoView = findViewById(R.id.pianoView)
         scaleSelectorLayout = findViewById(R.id.scaleSelectorLayout)
+        tunerInfoLayout = findViewById(R.id.tunerInfoLayout)
         rootNoteSpinner = findViewById(R.id.rootNoteSpinner)
         scaleTypeSpinner = findViewById(R.id.scaleTypeSpinner)
 
@@ -149,29 +154,38 @@ class MainActivity : AppCompatActivity() {
     private fun updateUiForMode() {
         if (currentMode == Mode.TUNER) {
             scaleSelectorLayout.visibility = View.GONE
-            findViewById<LinearLayout>(R.id.tunerInfoLayout).visibility = View.VISIBLE
+            pianoView.visibility = View.GONE
+            tunerInfoLayout.visibility = View.VISIBLE
+            // Show all tuner details
+            indicatorTextView.visibility = View.VISIBLE
+            centsTextView.visibility = View.VISIBLE
             fretboardView.highlightScale(emptyList())
-        } else { // SCALES mode
+        } else {
             scaleSelectorLayout.visibility = View.VISIBLE
-            findViewById<LinearLayout>(R.id.tunerInfoLayout).visibility = View.GONE
+            pianoView.visibility = View.VISIBLE
+            tunerInfoLayout.visibility = View.VISIBLE
+            // Hide tuner-specific details to simplify the view
+            indicatorTextView.visibility = View.GONE
+            centsTextView.visibility = View.GONE
             updateScaleHighlights()
         }
         fretboardView.highlightNote(null)
+        pianoView.highlightNote(null)
     }
 
     /**
-     * Gets the selected scale from the spinners and updates the fretboard view.
+     * Gets the selected scale from the spinners and updates the fretboard and piano views.
      */
     private fun updateScaleHighlights() {
         val selectedRoot = rootNoteSpinner.selectedItem.toString()
         val selectedScale = scaleTypeSpinner.selectedItem.toString()
         val scaleNotes = MusicTheory.getScaleNotes(selectedRoot, selectedScale)
         fretboardView.highlightScale(scaleNotes)
+        pianoView.highlightScale(scaleNotes)
     }
 
     /**
-     * Starts the main audio processing thread. It runs continuously and
-     * processes audio based on the current mode.
+     * Starts the main audio processing thread.
      */
     private fun startAudioProcessing() {
         if (isAudioProcessorRunning) return
@@ -203,7 +217,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Processes the detected pitch, updates the fretboard, and updates tuner UI if in TUNER mode.
+     * Processes the detected pitch, updating all relevant UI components.
      */
     private fun processPitch(pitchInHz: Float) {
         if (pitchInHz > 0) {
@@ -214,14 +228,16 @@ class MainActivity : AppCompatActivity() {
             val octave = (midiNote / 12) - 1
             val fullNoteName = "$noteName$octave"
 
+            // Update visual elements that are always active
             fretboardView.highlightNote(fullNoteName)
+            pianoView.highlightNote(fullNoteName)
+            pitchTextView.text = String.format("%.2f Hz", calibratedPitch)
+            noteTextView.text = fullNoteName
 
+            // Update tuner-specific details only in tuner mode
             if (currentMode == Mode.TUNER) {
                 val perfectFrequency = 440.0 * 2.0.pow((midiNote - 69) / 12.0)
                 val centsDifference = 1200 * (ln(calibratedPitch / perfectFrequency) / ln(2.0))
-
-                pitchTextView.text = String.format("%.2f Hz", calibratedPitch)
-                noteTextView.text = fullNoteName
                 centsTextView.text = String.format("%.1f cents", centsDifference)
                 updateTuningIndicator(centsDifference)
             }
@@ -229,12 +245,11 @@ class MainActivity : AppCompatActivity() {
             framesSinceLastDetection++
             if (framesSinceLastDetection > MAX_SILENT_FRAMES) {
                 fretboardView.highlightNote(null)
-                if (currentMode == Mode.TUNER) {
-                    pitchTextView.text = "--- Hz"
-                    noteTextView.text = ""
-                    indicatorTextView.text = ""
-                    centsTextView.text = ""
-                }
+                pianoView.highlightNote(null)
+                pitchTextView.text = "--- Hz"
+                noteTextView.text = ""
+                centsTextView.text = ""
+                indicatorTextView.text = ""
             }
         }
     }
