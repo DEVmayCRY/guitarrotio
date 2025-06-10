@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Gostou do App?"
+        android:text="Did you like the App?"
         android:textColor="@android:color/white"
         android:textSize="22sp" />
 
@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Este aplicativo é gratuito e sem anúncios. Se ele te ajudou, considere apoiar o desenvolvimento com um café!"
+        android:text="This app is free and without ads. If it helped you, consider supporting the development with a donation!"
         android:textAlignment="center"
         android:textColor="#CCCCCC"
         android:textSize="16sp" />
@@ -28,6 +28,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Buy me a coffee ☕" />
+        android:text="Donate 💳" />
 
 </LinearLayout>

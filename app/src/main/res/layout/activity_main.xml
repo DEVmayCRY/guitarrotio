@@ -8,22 +8,19 @@
     tools:context=".features.tuner.MainActivity"
     tools:openDrawer="start">
 
-    <!-- Conteúdo Principal da Tela -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <!-- Barra de Ferramentas (Header) -->
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
+            android:background="#625B71"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-        <!-- Container onde os Fragments serão carregados -->
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_container"
             android:name="com.example.guitarottio.features.home.HomeFragment"
@@ -32,7 +29,6 @@
 
     </LinearLayout>
 
-    <!-- O Menu de Navegação Lateral -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"

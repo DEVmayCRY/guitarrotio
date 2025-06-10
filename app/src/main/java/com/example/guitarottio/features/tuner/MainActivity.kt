@@ -44,13 +44,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Lógica para trocar os fragments
         val fragment = when (item.itemId) {
             R.id.nav_tuner -> TunerFragment()
             R.id.nav_scales -> ScalesFragment()
             R.id.nav_config -> ConfigFragment()
             R.id.nav_info -> InfoFragment()
-            else -> HomeFragment() // Padrão é Home
+            else -> HomeFragment()
         }
 
         supportFragmentManager.beginTransaction()

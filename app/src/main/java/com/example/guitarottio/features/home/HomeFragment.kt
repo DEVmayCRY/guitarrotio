@@ -12,7 +12,6 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Infla o layout para este fragmento
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 }

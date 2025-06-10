@@ -26,7 +26,7 @@ import kotlin.math.sqrt
 
 class TunerFragment : Fragment() {
 
-    // --- Constantes e Parâmetros ---
+    // --- Constants and Parameters ---
     private val REQUEST_RECORD_AUDIO_PERMISSION = 201
     private val CALIBRATION_FACTOR = 1.000f
     private val CENTS_TOLERANCE = 10
@@ -37,14 +37,14 @@ class TunerFragment : Fragment() {
     private val RMS_LOW_CUTOFF = 0.01f
     private val RMS_HIGH_CUTOFF = 0.8f
 
-    // --- Elementos da UI ---
+    // --- UI Elements ---
     private lateinit var pitchTextView: TextView
     private lateinit var noteTextView: TextView
     private lateinit var indicatorTextView: TextView
     private lateinit var centsTextView: TextView
-    private lateinit var fretboardView: FretboardView // Adicionado
+    private lateinit var fretboardView: FretboardView
 
-    // --- Processamento de Áudio ---
+    // --- Audio Processing ---
     private var dispatcher: AudioDispatcher? = null
     private var framesSinceLastDetection = 0
 
@@ -68,7 +68,7 @@ class TunerFragment : Fragment() {
         noteTextView = view.findViewById(R.id.noteTextView)
         indicatorTextView = view.findViewById(R.id.indicatorTextView)
         centsTextView = view.findViewById(R.id.centsTextView)
-        fretboardView = view.findViewById(R.id.fretboardView) // Adicionado
+        fretboardView = view.findViewById(R.id.fretboardView)
     }
 
     private fun setupPermissions() {
@@ -112,7 +112,7 @@ class TunerFragment : Fragment() {
             pitchTextView.text = String.format("%.2f Hz", calibratedPitch)
             noteTextView.text = fullNoteName
             centsTextView.text = String.format("%.1f cents", centsDifference)
-            fretboardView.highlightNote(fullNoteName) // Atualiza o braço
+            fretboardView.highlightNote(fullNoteName)
             updateTuningIndicator(centsDifference)
         } else {
             framesSinceLastDetection++
@@ -121,7 +121,7 @@ class TunerFragment : Fragment() {
                 noteTextView.text = ""
                 indicatorTextView.text = ""
                 centsTextView.text = ""
-                fretboardView.highlightNote(null) // Limpa o braço
+                fretboardView.highlightNote(null)
             }
         }
     }

@@ -30,7 +30,7 @@ class FretboardView(context: Context, attrs: AttributeSet?) : View(context, attr
     }
 
     // --- Fretboard properties ---
-    private val fretCount = 12
+    private val fretCount = 11
     private val stringCount = 6
 
     // --- State variables ---

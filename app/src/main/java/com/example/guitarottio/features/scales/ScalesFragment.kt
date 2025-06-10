@@ -26,14 +26,14 @@ import kotlin.math.roundToInt
 
 class ScalesFragment : Fragment() {
 
-    // --- Parâmetros ---
+    // --- Constants and Parameters ---
     private val REQUEST_RECORD_AUDIO_PERMISSION = 202
     private val MAX_SILENT_FRAMES = 20
     private val SAMPLE_RATE = 44100
     private val BUFFER_SIZE = 4096
     private val BUFFER_OVERLAP = 2048
 
-    // --- Elementos da UI ---
+    // --- UI Elements ---
     private lateinit var fretboardView: FretboardView
     private lateinit var pianoView: PianoView
     private lateinit var rootNoteSpinner: Spinner
@@ -42,7 +42,7 @@ class ScalesFragment : Fragment() {
     private lateinit var scientificNoteTextView: TextView
     private lateinit var frequencyTextView: TextView
 
-    // --- Processamento de Áudio ---
+    // --- Audio Processing ---
     private var dispatcher: AudioDispatcher? = null
     private var framesSinceLastDetection = 0
 
@@ -128,7 +128,6 @@ class ScalesFragment : Fragment() {
             fretboardView.highlightNote(fullNoteName)
             pianoView.highlightNote(fullNoteName)
 
-            // Atualiza a nova UI de informação
             portugueseNoteTextView.text = MusicTheory.NOTE_NAMES_PT[noteIndex]
             scientificNoteTextView.text = fullNoteName
             frequencyTextView.text = String.format("%.2f Hz", pitchInHz)
@@ -139,7 +138,6 @@ class ScalesFragment : Fragment() {
                 fretboardView.highlightNote(null)
                 pianoView.highlightNote(null)
 
-                // Limpa a UI de informação
                 portugueseNoteTextView.text = "---"
                 scientificNoteTextView.text = ""
                 frequencyTextView.text = ""
