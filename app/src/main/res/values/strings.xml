@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Guitarottio</string>
+    <string name="navigation_drawer_open">Abrir menu de navegação</string>
+    <string name="navigation_drawer_close">Fechar menu de navegação</string>
 </resources>

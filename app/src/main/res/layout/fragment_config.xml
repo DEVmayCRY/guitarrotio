@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="#121212">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Low Cutoff (RMS)"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"/>
+    <com.google.android.material.slider.Slider
+        android:id="@+id/lowCutoffSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="0.0"
+        android:valueTo="0.05"
+        android:stepSize="0.005"
+        android:value="0.01" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="High Cutoff (RMS)"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"/>
+    <com.google.android.material.slider.Slider
+        android:id="@+id/highCutoffSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="0.1"
+        android:valueTo="1.0"
+        android:stepSize="0.05"
+        android:value="0.8" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fator de Calibração"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:layout_marginTop="16dp"/>
+    <com.google.android.material.slider.Slider
+        android:id="@+id/calibrationSlider"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="0.994"
+        android:valueTo="1.006"
+        android:stepSize="0.001"
+        android:value="1.000" />
+
+</LinearLayout>

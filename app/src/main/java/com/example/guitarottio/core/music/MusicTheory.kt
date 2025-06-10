@@ -4,6 +4,7 @@ object MusicTheory {
 
     val NOTE_NAMES = listOf("C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
 
+    val NOTE_NAMES_PT = listOf("Do", "Do#", "Re", "Re#", "Mi", "Fa", "Fa#", "Sol", "Sol#", "La", "La#", "Si")
     // Standard guitar tuning from the 1st (thinnest) to the 6th (thickest) string.
     val GUITAR_STRINGS = listOf("E4", "B3", "G3", "D3", "A2", "E2")
 
