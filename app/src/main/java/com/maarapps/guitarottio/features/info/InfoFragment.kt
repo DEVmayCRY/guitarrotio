@@ -1,4 +1,4 @@
-package com.example.guitarottio.features.info
+package com.maarapps.guitarottio.features.info
 
 import android.content.Intent
 import android.net.Uri
@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import com.example.guitarottio.R
+import com.maarapps.guitarottio.R
 import android.widget.Toast
 
 

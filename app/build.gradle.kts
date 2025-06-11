@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.guitarottio"
+    namespace = "com.maarapps.guitarottio"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.guitarottio"
+        applicationId = "com.maarapps.guitarottio"
         minSdk = 26
         targetSdk = 35
         versionCode = 1

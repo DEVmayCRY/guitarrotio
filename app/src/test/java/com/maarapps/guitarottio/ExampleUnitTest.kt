@@ -1,4 +1,4 @@
-package com.example.guitarottio
+package com.maarapps.guitarottio
 
 import org.junit.Test
 

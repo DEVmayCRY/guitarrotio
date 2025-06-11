@@ -1,4 +1,4 @@
-package com.example.guitarottio.ui.views
+package com.maarapps.guitarottio.ui.views
 
 import android.content.Context
 import android.graphics.Canvas
@@ -6,7 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
-import com.example.guitarottio.core.music.MusicTheory
+import com.maarapps.guitarottio.core.music.MusicTheory
 
 /**
  * A custom View that draws a guitar fretboard and highlights detected notes and musical scales.

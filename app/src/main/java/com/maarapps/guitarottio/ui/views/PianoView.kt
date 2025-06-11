@@ -1,4 +1,4 @@
-package com.example.guitarottio.ui.views
+package com.maarapps.guitarottio.ui.views
 
 import android.content.Context
 import android.graphics.Canvas
@@ -7,7 +7,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import com.example.guitarottio.core.music.MusicTheory
+import com.maarapps.guitarottio.core.music.MusicTheory
 
 /**
  * A custom View that draws a 6-octave piano keyboard, split into two rows.

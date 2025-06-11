@@ -1,4 +1,4 @@
-package com.example.guitarottio
+package com.maarapps.guitarottio
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

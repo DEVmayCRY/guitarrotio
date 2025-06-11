@@ -33,7 +33,7 @@
             android:backgroundTint="@android:color/white" />
     </LinearLayout>
 
-    <com.example.guitarottio.ui.views.FretboardView
+    <com.maarapps.guitarottio.ui.views.FretboardView
         android:id="@+id/fretboardView"
         android:layout_width="0dp"
         android:layout_height="180dp"
@@ -42,7 +42,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <com.example.guitarottio.ui.views.PianoView
+    <com.maarapps.guitarottio.ui.views.PianoView
         android:id="@+id/pianoView"
         android:layout_width="0dp"
         android:layout_height="180dp"

@@ -1,4 +1,4 @@
-package com.example.guitarottio.features.tuner
+package com.maarapps.guitarottio.features.tuner
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -16,9 +16,10 @@ import be.tarsos.dsp.io.android.AudioDispatcherFactory
 import be.tarsos.dsp.pitch.PitchDetectionHandler
 import be.tarsos.dsp.pitch.PitchProcessor
 import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm
-import com.example.guitarottio.R
-import com.example.guitarottio.core.music.MusicTheory
-import com.example.guitarottio.ui.views.FretboardView
+import com.maarapps.guitarottio.R
+import com.maarapps.guitarottio.core.config.Config
+import com.maarapps.guitarottio.core.music.MusicTheory
+import com.maarapps.guitarottio.ui.views.FretboardView
 import kotlin.math.ln
 import kotlin.math.pow
 import kotlin.math.roundToInt
@@ -28,14 +29,6 @@ class TunerFragment : Fragment() {
 
     // --- Constants and Parameters ---
     private val REQUEST_RECORD_AUDIO_PERMISSION = 201
-    private val CALIBRATION_FACTOR = 1.000f
-    private val CENTS_TOLERANCE = 10
-    private val MAX_SILENT_FRAMES = 20
-    private val SAMPLE_RATE = 44100
-    private val TUNER_BUFFER_SIZE = 4096
-    private val TUNER_BUFFER_OVERLAP = TUNER_BUFFER_SIZE / 2
-    private val RMS_LOW_CUTOFF = 0.01f
-    private val RMS_HIGH_CUTOFF = 0.8f
 
     // --- UI Elements ---
     private lateinit var pitchTextView: TextView
@@ -80,15 +73,15 @@ class TunerFragment : Fragment() {
     }
 
     private fun startTuner() {
-        dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(SAMPLE_RATE, TUNER_BUFFER_SIZE, TUNER_BUFFER_OVERLAP)
+        dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(Config.SAMPLE_RATE, Config.BUFFER_SIZE, Config.BUFFER_OVERLAP)
         val tunerProcessor = object : AudioProcessor {
-            val mpm = PitchProcessor(PitchEstimationAlgorithm.MPM, SAMPLE_RATE.toFloat(), TUNER_BUFFER_SIZE,
+            val mpm = PitchProcessor(PitchEstimationAlgorithm.MPM, Config.SAMPLE_RATE.toFloat(), Config.BUFFER_SIZE,
                 PitchDetectionHandler { result, _ ->
                     activity?.runOnUiThread { processPitch(result.pitch) }
                 })
             override fun process(audioEvent: AudioEvent): Boolean {
                 val rms = calculateRms(audioEvent.floatBuffer)
-                if (rms > RMS_LOW_CUTOFF && rms < RMS_HIGH_CUTOFF) mpm.process(audioEvent)
+                if (rms > Config.RMS_LOW_CUTOFF && rms < Config.RMS_HIGH_CUTOFF) mpm.process(audioEvent)
                 else activity?.runOnUiThread { processPitch(-1.0f) }
                 return true
             }
@@ -101,7 +94,7 @@ class TunerFragment : Fragment() {
     private fun processPitch(pitchInHz: Float) {
         if (pitchInHz > 0) {
             framesSinceLastDetection = 0
-            val calibratedPitch = pitchInHz * CALIBRATION_FACTOR
+            val calibratedPitch = pitchInHz * Config.CALIBRATION_FACTOR
             val midiNote = (12 * (ln(calibratedPitch / 440f) / ln(2f)) + 69).roundToInt()
             val perfectFrequency = 440.0 * 2.0.pow((midiNote - 69) / 12.0)
             val centsDifference = 1200 * (ln(calibratedPitch / perfectFrequency) / ln(2.0))
@@ -116,7 +109,7 @@ class TunerFragment : Fragment() {
             updateTuningIndicator(centsDifference)
         } else {
             framesSinceLastDetection++
-            if (framesSinceLastDetection > MAX_SILENT_FRAMES) {
+            if (framesSinceLastDetection > Config.MAX_SILENT_FRAMES) {
                 pitchTextView.text = "--- Hz"
                 noteTextView.text = ""
                 indicatorTextView.text = ""
@@ -129,11 +122,11 @@ class TunerFragment : Fragment() {
     private fun updateTuningIndicator(cents: Double) {
         val context = context ?: return
         when {
-            cents > CENTS_TOLERANCE -> {
+            cents > Config.CENTS_TOLERANCE -> {
                 indicatorTextView.text = "→"
                 indicatorTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
             }
-            cents < -CENTS_TOLERANCE -> {
+            cents < -Config.CENTS_TOLERANCE -> {
                 indicatorTextView.text = "←"
                 indicatorTextView.setTextColor(ContextCompat.getColor(context, android.R.color.holo_red_light))
             }

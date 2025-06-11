@@ -1,4 +1,4 @@
-package com.example.guitarottio.features.scales
+package com.maarapps.guitarottio.features.scales
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -17,10 +17,11 @@ import be.tarsos.dsp.io.android.AudioDispatcherFactory
 import be.tarsos.dsp.pitch.PitchDetectionHandler
 import be.tarsos.dsp.pitch.PitchProcessor
 import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm
-import com.example.guitarottio.R
-import com.example.guitarottio.core.music.MusicTheory
-import com.example.guitarottio.ui.views.FretboardView
-import com.example.guitarottio.ui.views.PianoView
+import com.maarapps.guitarottio.R
+import com.maarapps.guitarottio.core.config.Config
+import com.maarapps.guitarottio.core.music.MusicTheory
+import com.maarapps.guitarottio.ui.views.FretboardView
+import com.maarapps.guitarottio.ui.views.PianoView
 import kotlin.math.ln
 import kotlin.math.roundToInt
 
@@ -28,10 +29,6 @@ class ScalesFragment : Fragment() {
 
     // --- Constants and Parameters ---
     private val REQUEST_RECORD_AUDIO_PERMISSION = 202
-    private val MAX_SILENT_FRAMES = 20
-    private val SAMPLE_RATE = 44100
-    private val BUFFER_SIZE = 4096
-    private val BUFFER_OVERLAP = 2048
 
     // --- UI Elements ---
     private lateinit var fretboardView: FretboardView
@@ -107,11 +104,11 @@ class ScalesFragment : Fragment() {
     }
 
     private fun startAudioProcessing() {
-        dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(SAMPLE_RATE, BUFFER_SIZE, BUFFER_OVERLAP)
+        dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(Config.SAMPLE_RATE, Config.BUFFER_SIZE, Config.BUFFER_OVERLAP)
         val pitchDetectionHandler = PitchDetectionHandler { result, _ ->
             activity?.runOnUiThread { processPitch(result.pitch) }
         }
-        val audioProcessor = PitchProcessor(PitchEstimationAlgorithm.MPM, SAMPLE_RATE.toFloat(), BUFFER_SIZE, pitchDetectionHandler)
+        val audioProcessor = PitchProcessor(PitchEstimationAlgorithm.MPM, Config.SAMPLE_RATE.toFloat(), Config.BUFFER_SIZE, pitchDetectionHandler)
         dispatcher?.addAudioProcessor(audioProcessor)
         Thread(dispatcher, "Scales Audio Processor").start()
     }
@@ -134,7 +131,7 @@ class ScalesFragment : Fragment() {
 
         } else {
             framesSinceLastDetection++
-            if (framesSinceLastDetection > MAX_SILENT_FRAMES) {
+            if (framesSinceLastDetection > Config.MAX_SILENT_FRAMES) {
                 fretboardView.highlightNote(null)
                 pianoView.highlightNote(null)
 

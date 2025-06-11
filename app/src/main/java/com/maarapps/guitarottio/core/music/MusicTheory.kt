@@ -1,4 +1,4 @@
-package com.example.guitarottio.core.music
+package com.maarapps.guitarottio.core.music
 
 object MusicTheory {
 

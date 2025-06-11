@@ -8,7 +8,7 @@
     android:padding="16dp"
     tools:context=".features.tuner.TunerFragment">
 
-    <com.example.guitarottio.ui.views.FretboardView
+    <com.maarapps.guitarottio.ui.views.FretboardView
         android:id="@+id/fretboardView"
         android:layout_width="0dp"
         android:layout_height="180dp"

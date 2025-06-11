@@ -1,4 +1,4 @@
-package com.example.guitarottio.features.tuner
+package com.maarapps.guitarottio.features.tuner
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -7,11 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import com.example.guitarottio.R
-import com.example.guitarottio.features.config.ConfigFragment
-import com.example.guitarottio.features.home.HomeFragment
-import com.example.guitarottio.features.info.InfoFragment
-import com.example.guitarottio.features.scales.ScalesFragment
+import com.maarapps.guitarottio.R
+import com.maarapps.guitarottio.features.config.ConfigFragment
+import com.maarapps.guitarottio.features.home.HomeFragment
+import com.maarapps.guitarottio.features.info.InfoFragment
+import com.maarapps.guitarottio.features.scales.ScalesFragment
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
