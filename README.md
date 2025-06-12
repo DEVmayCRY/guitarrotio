@@ -43,7 +43,7 @@ This project is a functional MVP (Minimum Viable Product), built with a clean, s
 
 Since this app is not yet available on the Google Play Store, you can install it directly by downloading the APK from the **Releases** section of this GitHub repository.
 
-1. Navigate to the [**Releases Page**](https://github.com/DEVmayCRY/guitarottio/releases "null").
+1. Navigate to the [**Releases Page**](https://github.com/DEVmayCRY/guitarrotio/releases/tag/v0.1.0) v0.1.0.
     
 2. Download the latest `Guitarottio-vX.X.apk` file.
     
