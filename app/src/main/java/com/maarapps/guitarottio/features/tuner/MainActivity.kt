@@ -1,13 +1,18 @@
 package com.maarapps.guitarottio.features.tuner
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.maarapps.guitarottio.R
+import com.maarapps.guitarottio.core.audio.AudioProcessorManager
 import com.maarapps.guitarottio.features.config.ConfigFragment
 import com.maarapps.guitarottio.features.home.HomeFragment
 import com.maarapps.guitarottio.features.info.InfoFragment
@@ -17,6 +22,7 @@ import com.google.android.material.navigation.NavigationView
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private lateinit var drawerLayout: DrawerLayout
+    private val REQUEST_RECORD_AUDIO_PERMISSION = 200
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +47,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .replace(R.id.fragment_container, HomeFragment()).commit()
             navigationView.setCheckedItem(R.id.nav_home)
         }
+
+        setupPermissions()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -65,5 +73,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun setupPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
+        } else {
+            AudioProcessorManager.start(applicationContext)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            AudioProcessorManager.start(applicationContext)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        AudioProcessorManager.stop()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        setupPermissions()
     }
 }

@@ -1,7 +1,5 @@
 package com.maarapps.guitarottio.features.scales
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,25 +8,22 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import be.tarsos.dsp.AudioDispatcher
-import be.tarsos.dsp.io.android.AudioDispatcherFactory
-import be.tarsos.dsp.pitch.PitchDetectionHandler
-import be.tarsos.dsp.pitch.PitchProcessor
-import be.tarsos.dsp.pitch.PitchProcessor.PitchEstimationAlgorithm
+import androidx.lifecycle.lifecycleScope
 import com.maarapps.guitarottio.R
+import com.maarapps.guitarottio.core.audio.AudioProcessorManager
 import com.maarapps.guitarottio.core.config.Config
 import com.maarapps.guitarottio.core.music.MusicTheory
 import com.maarapps.guitarottio.ui.views.FretboardView
 import com.maarapps.guitarottio.ui.views.PianoView
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import kotlin.math.ln
 import kotlin.math.roundToInt
 
 class ScalesFragment : Fragment() {
-
-    // --- Constants and Parameters ---
-    private val REQUEST_RECORD_AUDIO_PERMISSION = 202
 
     // --- UI Elements ---
     private lateinit var fretboardView: FretboardView
@@ -39,9 +34,8 @@ class ScalesFragment : Fragment() {
     private lateinit var scientificNoteTextView: TextView
     private lateinit var frequencyTextView: TextView
 
-    // --- Audio Processing ---
-    private var dispatcher: AudioDispatcher? = null
-    private var framesSinceLastDetection = 0
+    // --- State ---
+    private var clearUiJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,13 +43,8 @@ class ScalesFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_scales, container, false)
         setupViews(view)
-        setupPermissions()
+        observePitchUpdates()
         return view
-    }
-
-    override fun onStop() {
-        super.onStop()
-        dispatcher?.stop()
     }
 
     private fun setupViews(view: View) {
@@ -67,14 +56,6 @@ class ScalesFragment : Fragment() {
         scientificNoteTextView = view.findViewById(R.id.scientificNoteTextView)
         frequencyTextView = view.findViewById(R.id.frequencyTextView)
         setupSpinners()
-    }
-
-    private fun setupPermissions() {
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(arrayOf(Manifest.permission.RECORD_AUDIO), REQUEST_RECORD_AUDIO_PERMISSION)
-        } else {
-            startAudioProcessing()
-        }
     }
 
     private fun setupSpinners() {
@@ -103,20 +84,26 @@ class ScalesFragment : Fragment() {
         pianoView.highlightScale(scaleNotes)
     }
 
-    private fun startAudioProcessing() {
-        dispatcher = AudioDispatcherFactory.fromDefaultMicrophone(Config.SAMPLE_RATE, Config.BUFFER_SIZE, Config.BUFFER_OVERLAP)
-        val pitchDetectionHandler = PitchDetectionHandler { result, _ ->
-            activity?.runOnUiThread { processPitch(result.pitch) }
+    /**
+     * Subscribes to the shared audio processor to receive pitch updates.
+     */
+    private fun observePitchUpdates() {
+        lifecycleScope.launch {
+            AudioProcessorManager.pitchFlow.collectLatest { pitchInHz ->
+                processPitch(pitchInHz)
+            }
         }
-        val audioProcessor = PitchProcessor(PitchEstimationAlgorithm.MPM, Config.SAMPLE_RATE.toFloat(), Config.BUFFER_SIZE, pitchDetectionHandler)
-        dispatcher?.addAudioProcessor(audioProcessor)
-        Thread(dispatcher, "Scales Audio Processor").start()
     }
 
+    /**
+     * Processes the detected pitch and updates the UI elements in this fragment.
+     */
     private fun processPitch(pitchInHz: Float) {
-        if (pitchInHz > 0) {
-            framesSinceLastDetection = 0
-            val midiNote = (12 * (ln(pitchInHz / 440.0) / ln(2.0)) + 69).roundToInt()
+        val calibratedPitch = pitchInHz * Config.CALIBRATION_FACTOR
+        clearUiJob?.cancel()
+
+        if (calibratedPitch > 0) {
+            val midiNote = (12 * (ln(calibratedPitch / 440.0) / ln(2.0)) + 69).roundToInt()
             val noteIndex = (midiNote + 120) % 12
             val noteName = MusicTheory.NOTE_NAMES[noteIndex]
             val octave = (midiNote / 12) - 1
@@ -127,24 +114,21 @@ class ScalesFragment : Fragment() {
 
             portugueseNoteTextView.text = MusicTheory.NOTE_NAMES_PT[noteIndex]
             scientificNoteTextView.text = fullNoteName
-            frequencyTextView.text = String.format("%.2f Hz", pitchInHz)
+            frequencyTextView.text = String.format("%.2f Hz", calibratedPitch)
 
         } else {
-            framesSinceLastDetection++
-            if (framesSinceLastDetection > Config.MAX_SILENT_FRAMES) {
-                fretboardView.highlightNote(null)
-                pianoView.highlightNote(null)
-
-                portugueseNoteTextView.text = "---"
-                scientificNoteTextView.text = ""
-                frequencyTextView.text = ""
+            clearUiJob = lifecycleScope.launch {
+                delay(Config.MAX_SILENT_FRAMES)
+                clearUi()
             }
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            startAudioProcessing()
-        }
+    private fun clearUi() {
+        fretboardView.highlightNote(null)
+        pianoView.highlightNote(null)
+        portugueseNoteTextView.text = "---"
+        scientificNoteTextView.text = ""
+        frequencyTextView.text = ""
     }
 }
