@@ -1,70 +1,92 @@
-**
+# Guitarottio - A Modern Tuner & Music Theory Tool
 
-# Android Guitar Tuner & Fretboard Visualizer
+**Guitarottio** is a high-precision chromatic tuner and an advanced musical tool designed for Android. It provides musicians with an intuitive interface to tune their instruments accurately and a powerful visual aid for studying and exploring a vast library of musical scales on both a guitar fretboard and a piano keyboard.
 
-A simple, yet powerful, musical utility application for Android, built with Kotlin. This app serves as a high-precision chromatic tuner and a visual tool for learning and exploring musical scales on a guitar fretboard.
+This project is a functional MVP (Minimum Viable Product), built with a clean, scalable architecture and a focus on performance and accuracy.
 
-This project is currently an MVP (Minimum Viable Product) and serves as a foundation for more advanced features to come.
+## 📸 Screenshots
 
-## Current Features
+|Modo Afinador|Modo Escalas|
+|---|---|
+|![ecrã do afinador](https://github.com/DEVmayCRY/guitarrotio/blob/main/assets/2.png)|![ecrã das escalas](https://github.com/DEVmayCRY/guitarrotio/blob/main/assets/2.png)|
 
-- Chromatic Tuner Mode:
-    
+## ✨ Features
 
-- Real-time pitch detection using the robust MPM (McLeod Pitch Method) algorithm.
+- **High-Precision Tuner Mode**:
     
-- Displays the detected frequency (Hz), the closest note name, and octave.
-    
-- Provides precise feedback in cents to show how sharp or flat the note is.
-    
-- Visual indicators (arrows) for easy and intuitive tuning.
-    
-- Volume Cutoffs (RMS) to ignore background noise and prevent distorted signal analysis.
-    
-- A "persistence" feature to prevent the UI from flickering, especially on low or high notes.
-    
+    - **Accurate Pitch Detection**: Utilizes the robust **MPM (McLeod Pitch Method)** algorithm for fast and reliable pitch analysis.
 
-- Scales Mode:
-    
+    - **Harmonic Detection**: An excellent **post-processing heuristic** for pitch detection, which I developed using only pure musical mathematics.
+        
+    - **Detailed Feedback**: Displays the detected frequency (Hz), the closest note name with octave, and the precise deviation in **cents**.
+        
+    - **Intuitive Visuals**: A simple indicator arrow (← ● →) provides clear visual feedback for sharp, flat, and in-tune notes.
+        
+    - **Smart Noise Reduction**: Implements an **RMS-based volume cutoff** to ignore background noise and prevent analysis of distorted signals, ensuring stable readings.
+        
+    - **Reading Stability**: A persistence logic (`MAX_SILENT_FRAMES`) prevents the UI from flickering, especially on low or high notes, by holding the last detected note for a brief moment.
 
-- Fretboard Visualization: Displays a virtual 12-fret guitar neck.
-    
-- Scale Highlighting: Select a root note and a scale type from a comprehensive list to see all its notes highlighted on the fretboard.
-    
-- Live Note Display: The note you are currently playing is highlighted in red on the fretboard, even in Scales mode, providing real-time feedback.
-    
 
-## Technology Stack
+        
+- **Interactive Scales Mode**:
+    
+    - **Dual Visualization**: See scales and notes highlighted simultaneously on both a **guitar fretboard** and a **6-octave piano keyboard**.
+        
+    - **Comprehensive Scale Library**: Includes over 20 scales, from standard Major/Minor and Pentatonics to exotic scales like Phrygian Dominant and Double Harmonic.
+        
+    - **Live Feedback**: Play a note on your instrument, and it will instantly light up in red on both the fretboard and the piano, providing real-time context within the selected scale.
+        
+    - **Easy Selection**: Quickly choose any root note and scale type from simple dropdown menus.
+        
 
-- Language: Kotlin
-    
-- Audio Processing: TarsosDSP, a powerful library for real-time audio signal processing in Java and Kotlin.
-    
-- UI: Android Views with Material Components.
-    
+## 📦 Installation
 
-## Future Features
+Since this app is not yet available on the Google Play Store, you can install it directly by downloading the APK from the **Releases** section of this GitHub repository.
 
-This project is under active development. Planned features include:
-
-- Advanced Chord Detection: Implementing a robust FFT-based system to accurately detect major, minor, and other chord types.
+1. Navigate to the [**Releases Page**](https://github.com/DEVmayCRY/guitarottio/releases "null").
     
-- Custom Tunings: Allowing users to select from a list of alternate guitar tunings (Drop D, Open G, etc.).
+2. Download the latest `Guitarottio-vX.X.apk` file.
     
-- Metronome: A built-in metronome for practice.
+3. Open the downloaded file on your Android device.
     
-- UI/UX Improvements: Enhancing the visual design and user experience with custom graphics and animations.
+4. You may need to allow installation from "unknown sources" in your device's security settings.
+    
+5. Follow the on-screen instructions to complete the installation.
     
 
-## How to Build
+## 🛠️ Technology Stack
 
-1. Clone the repository.
+- **Language**: 100% **Kotlin**, following modern Android development practices.
     
-2. Open the project in Android Studio.
+- **Architecture**: Clean, feature-based architecture with separation of concerns (`core`, `features`, `ui`).
     
-3. The project uses a local .jar dependency for TarsosDSP located in the app/libs folder. Gradle should handle it automatically.
+- **Audio Processing**: Powered by **TarsosDSP**, a robust library for real-time audio signal processing.
     
-4. Build and run on an Android device or emulator.
+- **UI**: Android Views with custom, high-performance `View` components for the fretboard and piano.
+    
+- **Concurrency**: **Kotlin Coroutines** for managing background tasks and ensuring a smooth, non-blocking UI.
     
 
-**
+## 🚀 Future Roadmap
+
+This project is a living portfolio piece. Future enhancements include:
+
+- **Advanced Chord Detection**: Implementing an FFT-based system to accurately detect major, minor, and other chord types.
+    
+- **UI Upgrade:** A better and cool interface, with “harmonic” colors!
+    
+- **Custom Tunings**: Allowing users to select from a list of alternate guitar tunings (Drop D, Open G, etc.).
+    
+- **Metronome**: A built-in, precise metronome for practice.
+    
+- **"Hear the Note" Feature**: The ability to tap a note on the fretboard or piano to hear its corresponding sound.
+    
+
+## ☕ Support This Project
+
+This app is developed with passion, free of charge, and without any ads. If you find it useful, please consider supporting its development.
+Paypal - [Donate](https://www.paypal.com/donate/?hosted_button_id=GSFW5XEUS525N)
+
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/DEVmayCRY/guitarrotio/blob/main/LICENSE) file for details.
