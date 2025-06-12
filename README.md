@@ -8,7 +8,7 @@ This project is a functional MVP (Minimum Viable Product), built with a clean, s
 
 |Modo Afinador|Modo Escalas|
 |---|---|
-|![ecrã do afinador](https://github.com/DEVmayCRY/guitarrotio/blob/main/assets/2.png)|![ecrã das escalas](https://github.com/DEVmayCRY/guitarrotio/blob/main/assets/2.png)|
+|![ecrã do afinador](https://github.com/DEVmayCRY/guitarrotio/blob/main/assets/2.png)|![ecrã das escalas](https://github.com/DEVmayCRY/guitarrotio/blob/main/assets/3.png)|
 
 ## ✨ Features
 
